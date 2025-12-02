@@ -2,7 +2,6 @@
 
 namespace ProductCatalog.Domain.Abstractions;
 
-public interface ICategoryRepository
+public interface ICategoryRepository : IEntityRepository<Category>
 {
-    List<Category> GetAll();
 }

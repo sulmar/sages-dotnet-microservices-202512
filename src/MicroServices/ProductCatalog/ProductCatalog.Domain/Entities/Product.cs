@@ -1,7 +1,7 @@
 ﻿namespace ProductCatalog.Domain.Entities;
-public class Product
-{
-    public int Id { get; set; }
+
+public class Product : BaseEntity
+{   
     public string Name { get; set; }
     public decimal Price { get; set; }
     public decimal? DiscountedPrice { get; set; }
@@ -13,10 +13,4 @@ public class Product
         Price = price;
         DiscountedPrice = discountedPrice;
     }
-}
-
-
-public class Category
-{
-
 }
