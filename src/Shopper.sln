@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductCatalog", "ProductCa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.Api", "MicroServices\ProductCatalog\ProductCatalog.Api\ProductCatalog.Api.csproj", "{F974E154-E442-48AE-8D2D-88D5EB019DE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.Domain", "MicroServices\ProductCatalog\ProductCatalog.Domain\ProductCatalog.Domain.csproj", "{BAD11FA8-565C-4229-9744-A870243FA0E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,18 @@ Global
 		{F974E154-E442-48AE-8D2D-88D5EB019DE1}.Release|x64.Build.0 = Release|Any CPU
 		{F974E154-E442-48AE-8D2D-88D5EB019DE1}.Release|x86.ActiveCfg = Release|Any CPU
 		{F974E154-E442-48AE-8D2D-88D5EB019DE1}.Release|x86.Build.0 = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|x64.Build.0 = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Debug|x86.Build.0 = Debug|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|x64.ActiveCfg = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|x64.Build.0 = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|x86.ActiveCfg = Release|Any CPU
+		{BAD11FA8-565C-4229-9744-A870243FA0E4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +72,6 @@ Global
 		{2A75557D-45AD-427F-892E-C0422CC8060F} = {B439CD5A-B960-9506-14AE-95380622EC8C}
 		{F926D061-AB2A-94F5-7DDD-7C89233ED6DC} = {8A367DDA-5161-A942-4F09-60E4726C9306}
 		{F974E154-E442-48AE-8D2D-88D5EB019DE1} = {F926D061-AB2A-94F5-7DDD-7C89233ED6DC}
+		{BAD11FA8-565C-4229-9744-A870243FA0E4} = {F926D061-AB2A-94F5-7DDD-7C89233ED6DC}
 	EndGlobalSection
 EndGlobal
