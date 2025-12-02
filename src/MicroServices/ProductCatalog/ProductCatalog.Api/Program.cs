@@ -3,10 +3,12 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("api/products", () => "Hello Products!");
-app.MapGet("api/products/{id}", (int id) => $"Hello Product #{id}");
+var products = app.MapGroup("api/products");
+products.MapGet("/", () => "Hello Products!");
+products.MapGet("{id}", (int id) => $"Hello Product #{id}");
 
-app.MapGet("api/categories", () => "Hello Categories");
-app.MapGet("api/categories/{name}", (string name) => $"Hello Category {name}");
+var categories = app.MapGroup("api/categories");
+categories.MapGet("/", () => "Hello Categories");
+categories.MapGet("{name}", (string name) => $"Hello Category {name}");
 
 app.Run();
