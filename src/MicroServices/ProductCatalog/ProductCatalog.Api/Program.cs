@@ -9,7 +9,19 @@ builder.Services.AddScoped<ICategoryRepository, FakeCategoryRepository>();
 
 // builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorApp", policy =>
+    {
+        policy.WithOrigins("https://localhost:7000");
+        policy.WithMethods("GET");
+        policy.AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("BlazorApp");
 
 app.MapGet("/", () => "Hello World!");
 

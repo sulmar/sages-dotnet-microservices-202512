@@ -34,12 +34,9 @@
 
     private List<Product>? products;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        products = 
-
-       // TODO: uncomment
-       // products = await Http.GetFromJsonAsync<List<Product>>("api/products");
+       products = await Http.GetFromJsonAsync<List<Product>>("api/products");
     }
 
 }
