@@ -1,4 +1,7 @@
-﻿namespace ProductCatalog.Api.Endpoints;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProductCatalog.Domain.Abstractions;
+
+namespace ProductCatalog.Api.Endpoints;
 
 public static class ProductsEndpoints
 {
@@ -6,7 +9,7 @@ public static class ProductsEndpoints
     public static RouteGroupBuilder MapProducts(this IEndpointRouteBuilder routes)
     {
         var products = routes.MapGroup("api/products");
-        products.MapGet("/", () => "Hello Products!");
+        products.MapGet("/", (IProductRepository repository) => repository.GetAll());
         products.MapGet("{id}", (int id) => $"Hello Product #{id}");
 
         return products;
