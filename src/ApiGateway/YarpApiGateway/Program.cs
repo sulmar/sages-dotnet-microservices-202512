@@ -2,8 +2,15 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+// dotnet add package Microsoft.Extensions.ServiceDiscovery
+// Rejestracja uslugi do odnajdywania uslug
+builder.Services.AddServiceDiscovery();
+
+// dotnet add package Microsoft.Extensions.ServiceDiscovery.Yarp
+
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddServiceDiscoveryDestinationResolver();  // Uzycie uslugi odnajdywania uslug w YARP
 
 var app = builder.Build();
 
