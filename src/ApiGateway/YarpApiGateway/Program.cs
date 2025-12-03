@@ -1,4 +1,10 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
 var app = builder.Build();
 
 
@@ -12,10 +18,17 @@ app.Use(async (context, next) =>
     Console.WriteLine($"{context.Response.StatusCode}");
 });
 
+// Yarp (Yet Another Reverse Proxy)
 
-app.MapGet("/", () => "Hello Api Gateway!");
+// dotnet add package Yarp.ReverseProxy
+
+app.MapReverseProxy();
+
+//app.MapGet("/", () => "Hello Api Gateway!");
 
 app.MapGet("/ping", () => "Pong!");
+
+
 
 
 app.Run();

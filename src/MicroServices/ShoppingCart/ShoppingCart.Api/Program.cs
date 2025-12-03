@@ -8,21 +8,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect("localhost:6379"));
 builder.Services.AddScoped<ICartRepository, RedisCartRepository>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        // policy.WithOrigins("https://localhost:7000");
-        // policy.WithMethods("GET", "POST");
-        policy.AllowAnyOrigin();
-        policy.AllowAnyMethod();
-        policy.AllowAnyHeader();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(policy =>
+//    {
+//        // policy.WithOrigins("https://localhost:7000");
+//        // policy.WithMethods("GET", "POST");
+//        policy.AllowAnyOrigin();
+//        policy.AllowAnyMethod();
+//        policy.AllowAnyHeader();
+//    });
+//});
 
 var app = builder.Build();
 
-app.UseCors();
+// app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 

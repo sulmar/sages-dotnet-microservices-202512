@@ -27,19 +27,19 @@ builder.Services.AddScoped<Context>(sp =>
 
 // builder.Services.AddControllers();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("BlazorApp", policy =>
-    {
-        policy.WithOrigins("https://localhost:7000");
-        policy.WithMethods("GET");
-        policy.AllowAnyHeader();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("BlazorApp", policy =>
+//    {
+//        policy.WithOrigins("https://localhost:7000");
+//        policy.WithMethods("GET");
+//        policy.AllowAnyHeader();
+//    });
+//});
 
 var app = builder.Build();
 
-app.UseCors("BlazorApp");
+// app.UseCors("BlazorApp");
 
 app.MapGet("/", () => "Hello World!");
 

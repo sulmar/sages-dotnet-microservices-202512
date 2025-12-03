@@ -9,14 +9,18 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-string baseAddress = "https://localhost:7012";
+// string baseAddress = "https://localhost:7000";
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
+// builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
-builder.Services.AddScoped<Faker<Product>, ProductFaker>();
-builder.Services.AddScoped<IAsyncProductService, FakeProductService>();
+//builder.Services.AddScoped<Faker<Product>, ProductFaker>();
+//builder.Services.AddScoped<IAsyncProductService, FakeProductService>();
+
+builder.Services.AddScoped<IAsyncProductService, ApiProductService>();
+
+
 
 
 await builder.Build().RunAsync();
