@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BlazorApp;
+using Bogus;
+using BlazorApp.Model;
+using BlazorApp.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -11,6 +14,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 string baseAddress = "https://localhost:7011";
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
+
+builder.Services.AddScoped<Faker<Product>, ProductFaker>();
+builder.Services.AddScoped<IAsyncProductService, FakeProductService>();
 
 
 await builder.Build().RunAsync();

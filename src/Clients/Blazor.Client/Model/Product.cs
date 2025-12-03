@@ -7,6 +7,7 @@ public class Product
     public decimal Price { get; set; }
     public decimal? DiscountedPrice  { get; set; }
     public bool IsSale => Price > DiscountedPrice;
+    public bool Archived { get; set; }
 
 
     public Product()

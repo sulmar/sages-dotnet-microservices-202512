@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using BlazorApp.Components
 @using BlazorApp.Model
-@inject HttpClient Http
+@using BlazorApp.Services
+@inject IAsyncProductService Api
 
 <PageTitle>Home</PageTitle>
 
@@ -36,7 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-       products = await Http.GetFromJsonAsync<List<Product>>("api/products");
+        products = await Api.GetAll();
     }
 
 }
