@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "PaymentService.Grpc";
+
+package foo.bar;
+
+message PaymentRequest {
+	string order_id = 1;
+	PaymentMethod payment_method = 2;
+	double amount = 3;	
+}
+
+enum PaymentMethod {
+	CREDIT_CARD = 0;
+	BLIK = 1;
+	CASH = 2;
+}
+
+message PaymentResponse {
+	PaymentStatus status = 1;
+	optional string reason = 2;
+}
+
+enum PaymentStatus { 
+	UKNOWN = 0;
+	ACCEPTED = 1;
+	DECLICED = 2;
+}
+
+service PaymentService {
+	rpc Proces(PaymentRequest) returns (PaymentResponse);
+}
