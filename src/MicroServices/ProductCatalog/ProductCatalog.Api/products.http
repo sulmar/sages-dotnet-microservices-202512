@@ -1,0 +1,11 @@
+@host = https://localhost:7011
+
+@productId = 1
+
+GET {{host}}/api/products
+
+###
+
+GET {{host}}/api/products/{{productId}}
+
+###

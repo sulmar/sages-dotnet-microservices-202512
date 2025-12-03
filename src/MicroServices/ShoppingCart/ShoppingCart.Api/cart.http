@@ -1,0 +1,11 @@
+@host = https://localhost:7012
+
+POST {{host}}/api/cart
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "Quantity": 3
+}
+
+###

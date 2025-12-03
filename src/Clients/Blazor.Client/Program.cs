@@ -11,7 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-string baseAddress = "https://localhost:7011";
+string baseAddress = "https://localhost:7012";
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
