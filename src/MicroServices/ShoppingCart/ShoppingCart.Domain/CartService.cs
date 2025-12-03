@@ -12,16 +12,12 @@ public class CartService(ICartRepository repository, IHttpClientFactory factory)
 
         var http = factory.CreateClient("OrderingApi");
 
-        try
-        {
-            var response = await http.PostAsJsonAsync("/api/orders", order);
+        var response = await http.PostAsJsonAsync("/api/orders", order);
 
-        }
-        catch(Exception ex) 
+        if (!response.IsSuccessStatusCode)
         {
-            throw;
+            throw new ApplicationException("Blad skladania zamowienia.");
         }
-
         
     }
 }
