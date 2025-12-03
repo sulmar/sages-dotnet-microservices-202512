@@ -1,0 +1,16 @@
+@host = https://localhost:7013
+
+POST {{host}}/api/orders
+Content-Type: application/json
+
+[
+    {
+        "ProductId": 1,
+        "Quantity": 3
+    },
+    {
+        "ProductId": 2,
+        "Quantity": 1
+    }
+]
+
