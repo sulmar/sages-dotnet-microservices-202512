@@ -31,13 +31,13 @@ public class PaymentServiceImplementation : PaymentService.Grpc.PaymentService.P
         var stage2 = new PaymentStage { Stage = "Processing", Description = $"Payment {request.Amount:C2}..." };        
         var stage3 = new PaymentStage { Stage = "Done", Description = reason };
 
-        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 1); // symulacja opoznienia
         await responseStream.WriteAsync(stage1);
 
-        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 1); // symulacja opoznienia
         await responseStream.WriteAsync(stage2);
 
-        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 1); // symulacja opoznienia
         await responseStream.WriteAsync(stage3);
     }
 
