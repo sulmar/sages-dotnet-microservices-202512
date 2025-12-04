@@ -58,4 +58,7 @@ app.MapPost("api/cart/checkout", async (ICartService service) =>
 
 });
 
+// TODO: dodaj do Redis
+app.MapGet("api/cart/sessions/count", () => 20);
+
 app.Run();
