@@ -23,7 +23,7 @@ public class RedisProducer
         {
             new("event", "OrderPlaced"),
             new("orderid", orderId),
-            new("amout", amount.ToString(CultureInfo.InvariantCulture)),
+            new("amount", amount.ToString(CultureInfo.InvariantCulture)),
             new("currency", currency)
         };
 
