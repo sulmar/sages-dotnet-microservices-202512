@@ -19,6 +19,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 //builder.Services.AddScoped<IAsyncProductService, FakeProductService>();
 
 builder.Services.AddScoped<IAsyncProductService, ApiProductService>();
+builder.Services.AddScoped<IAsyncDashboardService, ApiDashboardService>();
 
 
 

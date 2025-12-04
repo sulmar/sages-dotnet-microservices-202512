@@ -1,24 +1,37 @@
 ﻿@page "/dashboard"
 @using BlazorApp.Components
+@using BlazorApp.Model
+@using BlazorApp.Services
+@inject IAsyncDashboardService Api
 
 <PageTitle>Dashboard</PageTitle>
 
-<!-- Section-->
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+@if (item is not null)
+{
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-            
-            <MetricRectangle Title="Total Sales" Value="$1,234" BackgroundColor="#28a745" TextColor="#fff" />
-            <MetricRectangle Title="New Users" Value="567" BackgroundColor="#007bff" TextColor="#fff" />
-            <MetricRectangle Title="Active Sessions" Value="89" BackgroundColor="#ffc107" TextColor="#000" />
-            
+
+                <MetricRectangle Title="Total Products" Value="@item.ProductsCount.ToString()" BackgroundColor="#28a745" TextColor="#fff" />
+                <MetricRectangle Title="Order Placed" Value="@item.OrderPlacedCount.ToString()" BackgroundColor="#007bff" TextColor="#fff" />
+                <MetricRectangle Title="Active Sessions" Value="@item.Sessions.ToString()" BackgroundColor="#ffc107" TextColor="#000" />
+
+            </div>
         </div>
-    </div>
-</section>
-
+    </section>
+}
 
 
 @code {
+    private DashboardItem? item;
+
+    protected override async Task OnInitializedAsync()
+    {
+        item = await Api.Get();
+    }
+
+
 
 }

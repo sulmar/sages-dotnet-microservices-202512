@@ -1,6 +1,5 @@
 ﻿using BlazorApp.Model;
 using Bogus;
-using System.Net.Http.Json;
 
 namespace BlazorApp.Services;
 
@@ -8,16 +7,6 @@ namespace BlazorApp.Services;
 public interface IAsyncProductService
 {
     Task<List<Product>?> GetAll();
-}
-
-
-// Infrastructure
-public class ApiProductService(HttpClient Http) : IAsyncProductService
-{
-    public Task<List<Product>?> GetAll()
-    {
-        return Http.GetFromJsonAsync<List<Product>>("api/products");
-    }
 }
 
 // dotnet add package Bogus

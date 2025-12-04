@@ -1,0 +1,46 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MicroServices\\ShoppingCart\\ShoppingCart.Api\\ShoppingCart.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "MicroServices\\ProductCatalog\\ProductCatalog.Api\\ProductCatalog.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Clients\\Blazor.Client\\BlazorApp.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "MicroServices\\Ordering\\Ordering.Api\\Ordering.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "ApiGateway\\YarpApiGateway\\YarpApiGateway.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "MicroServices\\Payment\\Payment.Api\\Payment.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "MicroServices\\Document\\Document.Api\\Document.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MicroServices\\DAshboard\\Dashboard.Api\\Dashboard.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]
