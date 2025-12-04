@@ -1,9 +1,10 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using PaymentService.Grpc;
 
 namespace Ordering.Api.Services;
 
-public class PaymentServiceImplementation
+public class PaymentServiceImplementation(ILogger<PaymentServiceImplementation> logger)
 {
     public async Task<PaymentResponse> MakeAsync(double totalAmount)
     {
@@ -19,6 +20,16 @@ public class PaymentServiceImplementation
         var client = new PaymentService.Grpc.PaymentService.PaymentServiceClient(channel);
        
         var response = await client.ProcesAsync(request);
+
+        // Subskrypcja
+        var streamCall = client.ProcessStream(request);
+
+        // Asynchroniczne przetwarzanie komunikatow w strumieniu
+        await foreach(var stage in streamCall.ResponseStream.ReadAllAsync<PaymentStage>())
+        {
+            logger.LogInformation("State: {stage} {description}", stage.Stage, stage.Description);
+        }
+
 
         return response;
     }

@@ -21,6 +21,12 @@ message PaymentResponse {
 	optional string reason = 2;
 }
 
+
+message PaymentStage {
+	string stage = 1;
+	string description = 2;	
+}
+
 enum PaymentStatus { 
 	UKNOWN = 0;
 	ACCEPTED = 1;
@@ -29,4 +35,5 @@ enum PaymentStatus {
 
 service PaymentService {
 	rpc Proces(PaymentRequest) returns (PaymentResponse);
+	rpc ProcessStream(PaymentRequest) returns (stream PaymentStage);
 }

@@ -21,4 +21,25 @@ public class PaymentServiceImplementation : PaymentService.Grpc.PaymentService.P
         return response;
 
     }
+
+    public override async Task ProcessStream(PaymentRequest request, IServerStreamWriter<PaymentStage> responseStream, ServerCallContext context)
+    {
+        var status = request.Amount < 1000 ? PaymentStatus.Accepted : PaymentStatus.Decliced;
+        var reason = status == PaymentStatus.Decliced ? "Limit exceed" : string.Empty;
+
+        var stage1 = new PaymentStage { Stage = "Initialized", Description = "Initializing..." };
+        var stage2 = new PaymentStage { Stage = "Processing", Description = $"Payment {request.Amount:C2}..." };        
+        var stage3 = new PaymentStage { Stage = "Done", Description = reason };
+
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await responseStream.WriteAsync(stage1);
+
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await responseStream.WriteAsync(stage2);
+
+        await Task.Delay(Random.Shared.Next(1000, 3000) * 10); // symulacja opoznienia
+        await responseStream.WriteAsync(stage3);
+    }
+
+    
 }
