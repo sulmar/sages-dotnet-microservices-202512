@@ -25,9 +25,17 @@ public class PaymentServiceImplementation(ILogger<PaymentServiceImplementation> 
         var streamCall = client.ProcessStream(request);
 
         // Asynchroniczne przetwarzanie komunikatow w strumieniu
-        await foreach(var stage in streamCall.ResponseStream.ReadAllAsync<PaymentStage>())
+
+        try
         {
-            logger.LogInformation("State: {stage} {description}", stage.Stage, stage.Description);
+            await foreach (var stage in streamCall.ResponseStream.ReadAllAsync<PaymentStage>())
+            {
+                logger.LogInformation("State: {stage} {description}", stage.Stage, stage.Description);
+            }
+        }
+        catch (RpcException ex)
+        {
+            logger.LogError(ex, ex.StatusCode.ToString());
         }
 
 
