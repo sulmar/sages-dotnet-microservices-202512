@@ -1,10 +1,12 @@
+using Document.Api.Channels;
 using StackExchange.Redis;
 
-namespace Document.Api;
+namespace Document.Api.Workers;
 
 public class RedisStreamWorker : BackgroundService
 {
     private readonly ILogger<RedisStreamWorker> _logger;
+    private readonly OrderPlacedEventChannel _channel;
     private readonly IDatabase _db;
 
     private const string StreamName = "ordering:stream";
@@ -12,10 +14,10 @@ public class RedisStreamWorker : BackgroundService
     private readonly string _consumerName;
     private const string OnlyNewMessages = ">";
 
-
-    public RedisStreamWorker(ILogger<RedisStreamWorker> logger, IConnectionMultiplexer connection)
+    public RedisStreamWorker(ILogger<RedisStreamWorker> logger, IConnectionMultiplexer connection, OrderPlacedEventChannel channel)
     {
         _logger = logger;
+        _channel = channel;
         _db = connection.GetDatabase();
 
         var instanceId = NanoidDotNet.Nanoid.Generate(size: 2);
@@ -41,13 +43,16 @@ public class RedisStreamWorker : BackgroundService
             {
                 var values = entry.Values.ToDictionary(x => x.Name, x => x.Value);
 
-                _logger.LogInformation("Event", values["event"]);
-                _logger.LogInformation("OrderId", values["orderid"]);
-                _logger.LogInformation("Amount", values["amount"]);
-                _logger.LogInformation("Currency", values["currency"]);
+                _logger.LogInformation("{Event}", values["event"]);
+                _logger.LogInformation("{OrderId}", values["orderid"]);
+                _logger.LogInformation("{Amount}", values["amount"]);
+                _logger.LogInformation("{Currency}", values["currency"]);
 
-                // Przetwarzanie, np. Generowanie dokumentu PDF
-                await Task.Delay(5000, stoppingToken);
+                // Mapper
+                var item = new OrderPlacedEvent(values["orderid"], double.Parse(values["amount"]), values["currency"]);
+
+                // Przekazujemy do kana³u
+                await _channel.Writer.WriteAsync(item);
 
                 // XACK
                 await _db.StreamAcknowledgeAsync(StreamName, GroupName, entry.Id);

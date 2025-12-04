@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Document.Api;
+namespace Document.Api.Workers;
 
 public class Worker : BackgroundService
 {
