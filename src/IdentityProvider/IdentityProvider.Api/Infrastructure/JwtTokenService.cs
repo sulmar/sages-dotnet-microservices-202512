@@ -19,7 +19,7 @@ public class JwtTokenService : ITokenService
             [JwtRegisteredClaimNames.PhoneNumber] = userIdentity.Phone,
             [JwtRegisteredClaimNames.GivenName] = userIdentity.FirstName,
             [JwtRegisteredClaimNames.FamilyName] = userIdentity.LastName,
-            [ClaimTypes.Role] = "director",            
+            [ClaimTypes.Role] = "developer",            
         };
 
         string secretKey = "a-string-secret-at-least-256-bits-long";

@@ -5,6 +5,7 @@ using ShoppingCart.Domain.Abstractions;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Infrastructure;
 using StackExchange.Redis;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,12 +77,17 @@ app.MapPost("api/cart", async (CartItem item, ICartRepository repository, ILogge
     await repository.AddAsync(sessionId, item);
 });
 
-app.MapPost("api/cart/checkout", async (ICartService service) =>
+app.MapPost("api/cart/checkout", async (ICartService service, HttpContext context) =>
 {
     var sessionId = "session-1";
 
     await service.Checkout(sessionId);
-}).RequireAuthorization();
+
+    var email = context.User.FindFirstValue(ClaimTypes.Email);
+
+    Console.WriteLine($"Send email to {email}");
+
+}).RequireAuthorization(policy=>policy.RequireRole("developer"));
 
 // TODO: dodaj do Redis
 app.MapGet("api/cart/sessions/count", () => 20);
