@@ -24,6 +24,19 @@ dotnet build
 ## Mapa drogowa
 ![Roadmap](docs/roadmap.png)
 
+## Porty mikroserwisów
+
+| Serwis | Port HTTPS | Port HTTP | Uwagi |
+|--------|------------|-----------|-------|
+| **Blazor.Client** | 7000 | 5265 | Aplikacja kliencka |
+| **YarpApiGateway** | 5001 | 5129 | Brama API |
+| **Dashboard.Api** | 7020 | 5250 | Mikroserwis dashboardu |
+| **Document.Api** | - | - | Worker/Hosted Service (brak portu HTTP) |
+| **Ordering.Api** | 7013 | 5165 | Mikroserwis zamówień |
+| **Payment.Api** | 7014 | 5000 | Mikroserwis płatności (gRPC) |
+| **ProductCatalog.Api** | 7011 | 7001 | Mikroserwis katalogu produktów |
+| **ShoppingCart.Api** | 7012 | 5170 | Mikroserwis koszyka zakupów |
+
 ## Struktura projektów
 
 ### Clients
