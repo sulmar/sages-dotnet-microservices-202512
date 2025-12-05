@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ShoppingCart.Domain;
 using ShoppingCart.Domain.Abstractions;
 using ShoppingCart.Domain.Entities;
@@ -19,6 +21,27 @@ builder.Services.AddHttpClient("OrderingApi", client => client.BaseAddress = new
     .AddServiceDiscovery(); // Uzyj uslugi do odnajdywania uslug
 
 
+var Issuer = "https://sages.pl";
+var Audience = "https://example.com";
+string secretKey = "a-string-secret-at-least-256-bits-long";
+
+// dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = Issuer,
+            ValidateAudience = true,
+            ValidAudience = Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 //builder.Services.AddCors(options =>
 //{
 //    options.AddDefaultPolicy(policy =>
@@ -34,6 +57,9 @@ builder.Services.AddHttpClient("OrderingApi", client => client.BaseAddress = new
 var app = builder.Build();
 
 // app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 
@@ -55,8 +81,7 @@ app.MapPost("api/cart/checkout", async (ICartService service) =>
     var sessionId = "session-1";
 
     await service.Checkout(sessionId);
-
-});
+}).RequireAuthorization();
 
 // TODO: dodaj do Redis
 app.MapGet("api/cart/sessions/count", () => 20);

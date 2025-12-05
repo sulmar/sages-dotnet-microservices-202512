@@ -1,4 +1,6 @@
-@host = https://localhost:7012
+@host = https://localhost:5001
+
+@access_token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2V4YW1wbGUuY29tIiwiaXNzIjoiaHR0cHM6Ly9zYWdlcy5wbCIsImV4cCI6MTc2NDkzMjQ5MywianRpIjoiYTlhNWUwMGYtYzA4OS00NGJjLWE0ZDktNmVlNWNhZTU1NGQ5IiwibmFtZSI6ImpvaG4iLCJlbWFpbCI6ImpvaG5AZG9tYWluLmNvbSIsInBob25lX251bWJlciI6bnVsbCwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IlNtaXRoIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiZGlyZWN0b3IiLCJpYXQiOjE3NjQ5MzE1OTMsIm5iZiI6MTc2NDkzMTU5M30.Uzb3NabYhhLlGFz9iKCmmlW76Z11GMJXMH6C1uJaQEA
 
 POST {{host}}/api/cart
 Content-Type: application/json
@@ -11,5 +13,6 @@ Content-Type: application/json
 ###
 
 POST {{host}}/api/cart/checkout
+Authorization: Bearer {{access_token}}
 
 ###
