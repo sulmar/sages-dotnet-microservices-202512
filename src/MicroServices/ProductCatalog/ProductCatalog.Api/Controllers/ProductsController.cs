@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductCatalog.Domain.Abstractions;
 
@@ -12,6 +13,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet()]
+    [Authorize(Roles = "director")]
     public ActionResult GetAll()
     {
         return Ok(productRepository.GetAll());

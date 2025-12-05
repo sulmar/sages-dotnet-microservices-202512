@@ -1,0 +1,11 @@
+@IdentityProvider.Api_HostAddress = https://localhost:7100
+
+POST {{IdentityProvider.Api_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+    "Username": "john",
+    "Password": "123"
+}
+
+###
