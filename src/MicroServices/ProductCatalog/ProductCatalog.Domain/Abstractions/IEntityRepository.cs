@@ -7,4 +7,5 @@ public interface IEntityRepository<T>
     where T : BaseEntity
 {
     List<T> GetAll();
+    T Get(int id);
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProductCatalog.Api.Endpoints;
 using ProductCatalog.Api.HealthChecks;
+using ProductCatalog.Api.Mappers;
 using ProductCatalog.Domain.Abstractions;
 using ProductCatalog.Domain.Entities;
 using ProductCatalog.Infrastructure;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IProductRepository, InMemoryProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, FakeCategoryRepository>();
+
+builder.Services.AddScoped<ProductMapper>();
 
 builder.Services.AddScoped<Context>(sp =>
 {

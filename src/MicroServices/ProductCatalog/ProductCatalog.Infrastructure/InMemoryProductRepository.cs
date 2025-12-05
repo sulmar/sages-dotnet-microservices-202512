@@ -7,6 +7,7 @@ namespace ProductCatalog.Infrastructure;
 // Primary Constructor
 public class InMemoryProductRepository(Context context) : IProductRepository
 {
+    public Product Get(int id) => context.Products[id];
     public List<Product> GetAll() => context.Products.Values.ToList();
     public List<Product> GetByCategory(string categoryName) => throw new NotImplementedException();
 }
@@ -43,6 +44,11 @@ public static class EnumerableExt
 
 public class EfDbProductRepository(DbContext context) : IProductRepository
 {
+    public Product Get(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Product> GetAll()
     {
         return context.Products.Where(p=>p.DiscountedPrice > 100).AsNoTracking().ToList();
