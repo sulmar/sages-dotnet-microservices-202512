@@ -1,0 +1,34 @@
+services:
+  shopper-redis:
+    image: redis:latest
+    ports:
+        - 6379:6379         
+
+  productcatalog.api:
+    image: ${DOCKER_REGISTRY-}productcatalogapi
+    build:
+      context: .
+      dockerfile: MicroServices/ProductCatalog/ProductCatalog.Api/Dockerfile
+
+  shoppingcart.api:
+    image: ${DOCKER_REGISTRY-}shoppingcartapi
+    build:
+      context: .
+      dockerfile: MicroServices/ShoppingCart/ShoppingCart.Api/Dockerfile
+    depends_on:
+        - shopper-redis
+
+
+  payment.api:
+    image: ${DOCKER_REGISTRY-}paymentapi
+    build:
+      context: .
+      dockerfile: MicroServices/Payment/Payment.Api/Dockerfile
+
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: MicroServices/Ordering/Ordering.Api/Dockerfile
+

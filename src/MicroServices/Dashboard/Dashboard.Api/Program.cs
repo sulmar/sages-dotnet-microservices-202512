@@ -1,6 +1,9 @@
+using Dashboard.Api.BackgroundServices;
+using Dashboard.Api.Hubs;
 using Dashboard.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Threading.Tasks.Dataflow;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,10 @@ builder.Services.AddHttpClient<ApiProductService>(client => client.BaseAddress =
     ;
 builder.Services.AddHttpClient<ApiCartService>(client => client.BaseAddress = new Uri("https://cart"))
     .AddServiceDiscovery();
+
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<DashboardBackgroundService>();
+builder.Services.AddSingleton<DashboardHub>();
 
 var app = builder.Build();
 
@@ -43,8 +50,11 @@ app.MapGet("/api/dashboard", async (
     return Results.Ok(dashboardItem);
 });
 
+
+app.MapHub<DashboardHub>("/signalr");
+
 app.Run();
 
 
 
-record DashboardItem(double ProductsCount, int OrderPlacedCount, int Sessions);
+public record DashboardItem(double ProductsCount, int OrderPlacedCount, int Sessions);

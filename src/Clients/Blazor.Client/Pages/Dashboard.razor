@@ -2,7 +2,9 @@
 @using BlazorApp.Components
 @using BlazorApp.Model
 @using BlazorApp.Services
+@using Microsoft.AspNetCore.SignalR.Client
 @inject IAsyncDashboardService Api
+
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -27,8 +29,22 @@
 @code {
     private DashboardItem? item;
 
+    private HubConnection connection;
+
     protected override async Task OnInitializedAsync()
     {
+        connection = new HubConnectionBuilder()
+            .WithUrl("/signalr")
+            .WithAutomaticReconnect()
+            .Build();
+
+        connection.On<DashboardItem>("DashboardChanged", (item) =>
+        {
+            Console.WriteLine(item.Sessions);
+        });
+
+        await connection.StartAsync();
+
         item = await Api.Get();
     }
 
