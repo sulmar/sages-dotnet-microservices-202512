@@ -30,6 +30,7 @@ dotnet build
 |--------|------------|-----------|-------|
 | **Blazor.Client** | 7000 | 5265 | Aplikacja kliencka |
 | **YarpApiGateway** | 5001 | 5129 | Brama API |
+| **IdentityProvider.Api** | 7100 | 5230 | Dostawca tożsamości |
 | **Dashboard.Api** | 7020 | 5250 | Mikroserwis dashboardu |
 | **Document.Api** | - | - | Worker/Hosted Service (brak portu HTTP) |
 | **Ordering.Api** | 7013 | 5165 | Mikroserwis zamówień |
@@ -58,7 +59,10 @@ Brama API zbudowana z wykorzystaniem YARP (Yet Another Reverse Proxy) - punkt we
 - Endpoint `/ping` do weryfikacji dostępności
 
 ### IdentityProvider
-Dostawca tożsamości odpowiedzialny za autentykację i autoryzację użytkowników (obecnie w przygotowaniu).
+Dostawca tożsamości odpowiedzialny za autentykację i autoryzację użytkowników:
+- **IdentityProvider.Api**: Warstwa API z serwisami autentykacji i autoryzacji
+- **Abstractions**: Interfejsy serwisów (IAuthService, ITokenService)
+- **Infrastructure**: Implementacje serwisów (AuthService, JwtTokenService)
 
 ### MicroServices
 
@@ -66,23 +70,30 @@ Dostawca tożsamości odpowiedzialny za autentykację i autoryzację użytkownik
 Mikroserwis dashboardu agregujący dane z różnych mikroserwisów:
 - **Dashboard.Api**: Warstwa API z endpointem `/api/dashboard` agregującym dane z ProductCatalog i ShoppingCart
 - **Services**: Serwisy do komunikacji z innymi mikroserwisami (ApiProductService, ApiCartService)
+- **Hubs**: SignalR Hub (DashboardHub) do komunikacji w czasie rzeczywistym
+- **BackgroundServices**: Tło serwisy do przetwarzania danych (DashboardBackgroundService)
 - Używa Service Discovery do odnajdywania innych mikroserwisów
 - Wykonuje równoległe zapytania do różnych serwisów używając `Task.WhenAll`
 
 #### Document
 Mikroserwis przetwarzania dokumentów zbudowany jako aplikacja Worker/Hosted Service:
-- **Document.Api**: Aplikacja hostująca workerów do przetwarzania zdarzeń
-- **Channels**: Kanały komunikacji (OrderPlacedEventChannel)
-- **Workers**: Workerzy do przetwarzania zdarzeń (OrderProcessingWorker, RedisStreamWorker)
-- Używa Redis Streams do odbierania i przetwarzania zdarzeń z systemu
+- **Document.Api**: Aplikacja hostująca workerów do przetwarzania zdarzeń (Worker Service, brak portu HTTP)
+- **Channels**: Kanały komunikacji asynchronicznej (OrderPlacedEventChannel) używające System.Threading.Channels
+- **Workers**: Workerzy do przetwarzania zdarzeń:
+  - **RedisStreamWorker**: Odbiera zdarzenia z Redis Streams (stream: `ordering:stream`, grupa: `document_group`)
+  - **OrderProcessingWorker**: Przetwarza zdarzenia OrderPlaced z kanału (symuluje generowanie dokumentów PDF)
+- Używa Redis Streams do odbierania zdarzeń z systemu Ordering
+- Używa System.Threading.Channels do komunikacji między workerami
+- Generuje unikalne identyfikatory konsumentów używając Nanoid
 
 #### Ordering
 Mikroserwis zamówień odpowiedzialny za tworzenie i przetwarzanie zamówień:
-- **Ordering.Api**: Warstwa API z endpointem `/api/orders` do tworzenia zamówień
-- **Services**: Serwisy do komunikacji z Payment (PaymentService) i publikowania zdarzeń (RedisProducer)
+- **Ordering.Api**: Warstwa API z endpointem POST `/api/orders` do tworzenia zamówień
+- **Services**: Serwisy do komunikacji z Payment (PaymentServiceImplementation) i publikowania zdarzeń (RedisProducer)
+- **Protos**: Definicje protobuf dla komunikacji gRPC (payment.proto)
 - Używa gRPC do komunikacji z mikroserwisem Payment
-- Publikuje zdarzenia OrderPlaced do Redis Streams po pomyślnym przetworzeniu płatności
-- Generuje unikalne identyfikatory zamówień używając Nanoid
+- Publikuje zdarzenia OrderPlaced do Redis Streams (`ordering:stream`) po pomyślnym przetworzeniu płatności
+- Generuje unikalne identyfikatory zamówień używając Nanoid (5-znakowe ID z alfabetem alfanumerycznym)
 
 #### Payment
 Mikroserwis płatności udostępniający funkcjonalność płatności przez gRPC:
@@ -107,6 +118,7 @@ Mikroserwis koszyka zakupów z architekturą warstwową:
   - **Abstractions**: Interfejsy repozytoriów i serwisów (ICartRepository, ICartService)
   - **CartService**: Logika biznesowa koszyka (checkout)
 - **ShoppingCart.Infrastructure**: Warstwa infrastruktury z implementacją repozytorium Redis (RedisCartRepository)
+- Wymaga uruchomionego serwisu Redis (port 6379)
 
 #### Monitoring
 Mikroserwis monitoringu systemu (obecnie w przygotowaniu).
@@ -116,3 +128,28 @@ Mikroserwis profilu użytkownika (obecnie w przygotowaniu).
 
 ### Shared.Models
 Współdzielone modele danych używane przez różne mikroserwisy (obecnie w przygotowaniu).
+
+## Infrastruktura
+
+### Redis
+System używa Redis do:
+- Przechowywania danych koszyka zakupów (ShoppingCart.Api)
+- Przesyłania zdarzeń przez Redis Streams (Ordering.Api → Document.Api)
+- Stream: `ordering:stream`
+- Consumer Group: `document_group`
+
+### Docker Compose
+Projekt zawiera konfigurację Docker Compose (`docker-compose.yml`) z następującymi serwisami:
+- **shopper-redis**: Kontener Redis (port 6379)
+- **productcatalog.api**: Mikroserwis katalogu produktów
+- **shoppingcart.api**: Mikroserwis koszyka zakupów (zależny od Redis)
+- **payment.api**: Mikroserwis płatności
+- **ordering.api**: Mikroserwis zamówień
+
+## Komunikacja między mikroserwisami
+
+- **HTTP/REST**: Komunikacja między większością mikroserwisów (ProductCatalog, ShoppingCart, Dashboard, Ordering)
+- **gRPC**: Komunikacja między Ordering.Api a Payment.Api
+- **Redis Streams**: Asynchroniczna komunikacja zdarzeń między Ordering.Api a Document.Api
+- **SignalR**: Komunikacja w czasie rzeczywistym w Dashboard.Api
+- **System.Threading.Channels**: Komunikacja wewnętrzna w Document.Api między workerami
