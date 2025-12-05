@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProductCatalog.Api.Endpoints;
+using ProductCatalog.Api.HealthChecks;
 using ProductCatalog.Domain.Abstractions;
 using ProductCatalog.Domain.Entities;
 using ProductCatalog.Infrastructure;
@@ -25,6 +28,13 @@ builder.Services.AddScoped<Context>(sp =>
     return new Context { Products = _products };
 });
 
+
+builder.Services.AddHealthChecks()
+    .AddCheck("Random", () => DateTime.Now.Minute % 2 == 0 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy())
+    .AddCheck<LogHealthCheck>("log");
+    ;
+    
+
 // builder.Services.AddControllers();
 
 //builder.Services.AddCors(options =>
@@ -49,6 +59,15 @@ app.MapProducts();
 app.MapCategories();
 
 // app.MapControllers();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(report);
+    }
+});
 
 app.Run();
 

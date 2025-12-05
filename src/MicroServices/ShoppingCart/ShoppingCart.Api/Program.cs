@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using ShoppingCart.Domain;
 using ShoppingCart.Domain.Abstractions;
@@ -42,6 +43,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+// dotnet add package AspNetCore.HealthChecks.Redis
+builder.Services.AddHealthChecks()
+    .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), name: "redis");
 
 //builder.Services.AddCors(options =>
 //{
@@ -91,5 +96,15 @@ app.MapPost("api/cart/checkout", async (ICartService service, HttpContext contex
 
 // TODO: dodaj do Redis
 app.MapGet("api/cart/sessions/count", () => 20);
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        // TODO: Naprawic blad serializacji
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(report);
+    }
+});
 
 app.Run();
